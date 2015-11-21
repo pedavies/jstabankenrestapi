@@ -30,7 +30,7 @@ public class DBHelper {
 	      c.commit();
 	      c.close();
 	    } catch ( Exception e ) {
-	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	      System.err.println( e.getClass().getName() + ":" + e.getMessage() );
 	      System.exit(0);
 	    }
 	    System.out.println("SQL executed created successfully");
@@ -59,7 +59,7 @@ public class DBHelper {
 			      executeUpdate("INSERT INTO CUSTOMERS (ID,NAME,BALANCE) " +
 		                   "VALUES (2, 'Rickard', 20055.2);");
 			    } catch ( Exception e ) {
-			      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			      System.err.println( e.getClass().getName() + ":" + e.getMessage() );
 			      System.exit(0);
 			    }
 			    System.out.println("Table created successfully");
@@ -88,7 +88,7 @@ public class DBHelper {
 	      c.close();
 	      return exist;
 	    } catch ( Exception e ) {
-	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	      System.err.println( e.getClass().getName() + ":" + e.getMessage() );
 	      System.exit(0);
 	    }
 	    System.out.println("Operation done successfully");
@@ -117,7 +117,7 @@ public class DBHelper {
 		      c.close();
 		      return lastIndex + 1;
 		    } catch ( Exception e ) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.err.println( e.getClass().getName() + ":" + e.getMessage() );
 		      System.exit(0);
 		    }
 		    System.out.println("Operation done successfully");
@@ -151,7 +151,7 @@ public class DBHelper {
 		      }
 		      return exist;
 		    } catch ( Exception e ) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.err.println( e.getClass().getName() + ":" + e.getMessage() );
 		      System.exit(0);
 		    }
 		    System.out.println("Operation done successfully");
@@ -166,7 +166,7 @@ public class DBHelper {
 		  int index = getNextId();
 	      executeUpdate("INSERT INTO CUSTOMERS (ID,NAME,BALANCE) " +
                   "VALUES ("+ index +", '"+ name +"', 0);");
-	      return Response.ok("{\"Name\": \"" + name + "\" \"Balance\": \"0\"}").build();
+	      return Response.ok("{\"Name\":\"" + name + "\", \"Balance\":\"0\"}").build();
 	  }
 	  
 	  public static float getBalance(String name) {
@@ -195,7 +195,7 @@ public class DBHelper {
 		      c.close();
 		      return  balance;
 		    } catch ( Exception e ) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.err.println( e.getClass().getName() + ":" + e.getMessage() );
 		      System.exit(0);
 		    }
 		    System.out.println("Operation done successfully");
@@ -204,11 +204,11 @@ public class DBHelper {
 	
 	 public static Response setBalance(String name, float balance){
 		 if(!isCustomerExist(name)){
-				return Response.status(Response.Status.NOT_FOUND).entity("Kunde inte hitta kund med namn: " + name).build();
+				return Response.status(Response.Status.NOT_FOUND).entity("Kunde inte hitta kund med namn:" + name).build();
 			 }
 		 
 		 executeUpdate("UPDATE CUSTOMERS set balance = "+ balance + " where NAME = '"+name+"';");
-		 return Response.ok("{\"Name\": \"" + name + "\" \"Balance\": \"" + balance + "\"}").build();
+		 return Response.ok("{\"Name\":\"" + name + "\", \"Balance\":\"" + balance + "\"}").build();
 	 }
 	 
 	 public static Response getCustomers()
@@ -236,7 +236,7 @@ public class DBHelper {
 		      customers = (customers + "]}").replace("},]}","}]}");
 		      return Response.ok(customers).build();
 		    } catch ( Exception e ) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.err.println( e.getClass().getName() + ":" + e.getMessage() );
 		      System.exit(0);
 		    }
 		    System.out.println("Operation done successfully");
