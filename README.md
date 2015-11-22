@@ -5,6 +5,7 @@ Filen är tänkt att användas för undervisning av REST API testning med SoapUI
 Du har också källkoden om du vill ändra på API:et
 
 För att starta REST API:et:
+
 1a. Klona repot: git clone https://github.com/saadhashim/jstabankenrestapi.git
 
 1b. Bygg koden (Endast om du har ändrat något): mvn clean install 
@@ -25,6 +26,7 @@ The file is amed for learining automation of REST API tests using SoapUI.
 You also have the source code in case you want to change something.
 
 To start the REST API:
+
 1a. Clone the repo: git clone https://github.com/saadhashim/jstabankenrestapi.git
 
 1b. Build the code (Only if you change something): mvn clean install 
