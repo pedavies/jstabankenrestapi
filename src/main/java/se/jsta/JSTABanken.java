@@ -2,6 +2,7 @@ package se.jsta;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -14,6 +15,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import javafx.fxml.LoadException;
 import se.jsta.DBHelper;
 
 
@@ -32,8 +34,13 @@ public class JSTABanken {
     	if(null == name){
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("You have to provide a name").build();
     	}
-		DBHelper.initDB();
-		return DBHelper.createCustomer(name);
+    	try{
+    		DBHelper.initDB();
+    		return DBHelper.createCustomer(name);
+    	}catch(TimeoutException le){
+    		return Response.status(Response.Status.REQUEST_TIMEOUT).entity("Databasen hinner inte med").build();
+    	}
+
 	}
 
     @POST
@@ -47,18 +54,23 @@ public class JSTABanken {
     	if(0 == amount){
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("You have to provide an amount").build();
     	}
-		DBHelper.initDB();
-		float balance = DBHelper.getBalance(name);
-		
-		if(balance == -1){
-			return Response.status(Response.Status.NOT_FOUND).entity("Kunde inte hitta kund med namn:" + name).build();
+    	try{
+    		DBHelper.initDB();
+    		float balance = DBHelper.getBalance(name);
+    		
+    		if(balance == -1){
+    			return Response.status(Response.Status.NOT_FOUND).entity("Kunde inte hitta kund med namn:" + name).build();
 
-		}
-		if (amount <= 0) {
-			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Beloppet är negativt:" + amount).build();
-		}
+    		}
+    		if (amount <= 0) {
+    			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Beloppet är negativt:" + amount).build();
+    		}
 
-		return DBHelper.setBalance(name, balance + amount);
+    		return DBHelper.setBalance(name, balance + amount);
+    	}catch(TimeoutException le){
+    		return Response.status(Response.Status.REQUEST_TIMEOUT).entity("Databasen hinner inte med").build();
+    	}
+
 	}
 
     @POST
@@ -72,23 +84,28 @@ public class JSTABanken {
     	if(0 == amount){
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("You have to provide an amount").build();
     	}
-    	DBHelper.initDB();
-		float balance = DBHelper.getBalance(name);
-		
-		if(balance == -1){
-			return Response.status(Response.Status.NOT_FOUND).entity("Kunde inte hitta kund med namn:" + name).build();
+    	try{
+        	DBHelper.initDB();
+    		float balance = DBHelper.getBalance(name);
+    		
+    		if(balance == -1){
+    			return Response.status(Response.Status.NOT_FOUND).entity("Kunde inte hitta kund med namn:" + name).build();
 
-		}
-		
-		if (amount <= 0) {
-			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Beloppet är negativt:" + amount).build();
-		}
+    		}
+    		
+    		if (amount <= 0) {
+    			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Beloppet är negativt:" + amount).build();
+    		}
 
-		
-		if (balance - amount < 0) {
-			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Det finns för lite pengar:" + amount).build();
-		}
-		return DBHelper.setBalance(name, balance - amount);
+    		
+    		if (balance - amount < 0) {
+    			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Det finns för lite pengar:" + amount).build();
+    		}
+    		return DBHelper.setBalance(name, balance - amount);
+    	}catch(TimeoutException le){
+    		return Response.status(Response.Status.REQUEST_TIMEOUT).entity("Databasen hinner inte med").build();
+    	}
+
 
 	}
 
@@ -99,22 +116,32 @@ public class JSTABanken {
     	if(null == name){
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("You have to provide a name").build();
     	}
-		DBHelper.initDB();
-		float balance = DBHelper.getBalance(name);
-		if(balance == -1){
-			return Response.status(Response.Status.NOT_FOUND).entity("Kunde inte hitta kund med namn:" + name).build();
-				
-		}else{
-			return Response.ok("{\"Name\":\"" + name + "\", \"Balance\":\"" + balance +"\"}").build();
-		}
+    	try{
+    		DBHelper.initDB();
+    		float balance = DBHelper.getBalance(name);
+    		if(balance == -1){
+    			return Response.status(Response.Status.NOT_FOUND).entity("Kunde inte hitta kund med namn:" + name).build();
+    				
+    		}else{
+    			return Response.ok("{\"Name\":\"" + name + "\", \"Balance\":\"" + balance +"\"}").build();
+    		}
+    	}catch(TimeoutException le){
+    		return Response.status(Response.Status.REQUEST_TIMEOUT).entity("Databasen hinner inte med").build();
+    	}
+
 	}
 	
     @GET
     @Path("getcustomers")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCusomers() {
-		DBHelper.initDB();
-		return  DBHelper.getCustomers();
+    	try{
+    		DBHelper.initDB();
+    		return  DBHelper.getCustomers();
+    	}catch(TimeoutException le){
+    		return Response.status(Response.Status.REQUEST_TIMEOUT).entity("Databasen hinner inte med").build();
+    	}
+
     }
     
 

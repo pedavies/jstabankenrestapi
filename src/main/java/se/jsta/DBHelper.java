@@ -6,17 +6,20 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import javax.ws.rs.core.Response;
+
+import javafx.fxml.LoadException;
 
 public class DBHelper {
 	private static String dbConnectionName = "jdbc:sqlite:jstabanken.db";
 
-	public static void initDB(){
+	public static void initDB() throws TimeoutException{
 		createTableIfNotExist();
 	}
 	
-	public static void executeUpdate(String sql){
+	public static void executeUpdate(String sql) throws TimeoutException{
 		Connection c = null;
 	    Statement stmt = null;
 	    try {
@@ -31,12 +34,18 @@ public class DBHelper {
 	      c.close();
 	    } catch ( Exception e ) {
 	      System.err.println( e.getClass().getName() + ":" + e.getMessage() );
-	      System.exit(0);
+	      try{
+	    	  c.close();
+	      }catch(Exception ee){
+	    	  
+	      }finally{
+	    	  throw new TimeoutException("Databasen hinner inte med");
+	      }
 	    }
 	    System.out.println("SQL executed created successfully");
 	}
 	
-	private static void createTableIfNotExist(){
+	private static void createTableIfNotExist() throws TimeoutException{
 		if(!isTableAlreadyCreted()){
 			  Connection c = null;
 			    Statement stmt = null;
@@ -60,14 +69,20 @@ public class DBHelper {
 		                   "VALUES (2, 'Rickard', 20055.2);");
 			    } catch ( Exception e ) {
 			      System.err.println( e.getClass().getName() + ":" + e.getMessage() );
-			      System.exit(0);
+			      try{
+			    	  c.close();
+			      }catch(Exception ee){
+			    	  
+			      }finally{
+			    	  throw new TimeoutException("Databasen hinner inte med");
+			      }
 			    }
 			    System.out.println("Table created successfully");
 		}
 	}
 	
 	
-	  private static boolean isTableAlreadyCreted()
+	  private static boolean isTableAlreadyCreted() throws TimeoutException
 	  {
 	    Connection c = null;
 	    Statement stmt = null;
@@ -89,13 +104,17 @@ public class DBHelper {
 	      return exist;
 	    } catch ( Exception e ) {
 	      System.err.println( e.getClass().getName() + ":" + e.getMessage() );
-	      System.exit(0);
+	      try{
+	    	  c.close();
+	      }catch(Exception ee){
+	    	  
+	      }finally{
+	    	  throw new TimeoutException("Databasen hinner inte med");
+	      }
 	    }
-	    System.out.println("Operation done successfully");
-	    return false;
 	  }
 	  
-	  private static int getNextId(){
+	  private static int getNextId() throws TimeoutException{
 	      System.out.println("Getting the next id");
 
 		   Connection c = null;
@@ -118,13 +137,17 @@ public class DBHelper {
 		      return lastIndex + 1;
 		    } catch ( Exception e ) {
 		      System.err.println( e.getClass().getName() + ":" + e.getMessage() );
-		      System.exit(0);
+		      try{
+		    	  c.close();
+		      }catch(Exception ee){
+		    	  
+		      }finally{
+		    	  throw new TimeoutException("Databasen hinner inte med");
+		      }
 		    }
-		    System.out.println("Operation done successfully");
-		    return 0;
 	  }
 	  
-	  private static boolean isCustomerExist(String name){
+	  private static boolean isCustomerExist(String name) throws TimeoutException{
 	      System.out.println("Checking if customer exist");
 		  Connection c = null;
 		    Statement stmt = null;
@@ -152,14 +175,18 @@ public class DBHelper {
 		      return exist;
 		    } catch ( Exception e ) {
 		      System.err.println( e.getClass().getName() + ":" + e.getMessage() );
-		      System.exit(0);
+		      try{
+		    	  c.close();
+		      }catch(Exception ee){
+		    	  
+		      }finally{
+		    	  throw new TimeoutException("Databasen hinner inte med");
+		      }
 		    }
-		    System.out.println("Operation done successfully");
-		    return false;
 	  }
 	  
 	  
-	  public static Response createCustomer(String name) {
+	  public static Response createCustomer(String name) throws TimeoutException {
 		  if(isCustomerExist(name)){
 			  return Response.status(Response.Status.CONFLICT).entity( "A Customer with name "+ name +" already exist").build();
 		  }
@@ -169,7 +196,7 @@ public class DBHelper {
 	      return Response.ok("{\"Name\":\"" + name + "\", \"Balance\":\"0\"}").build();
 	  }
 	  
-	  public static float getBalance(String name) {
+	  public static float getBalance(String name) throws TimeoutException {
 	      System.out.println("Getting balance for " + name);
 
 		  if(!isCustomerExist(name)){
@@ -196,13 +223,17 @@ public class DBHelper {
 		      return  balance;
 		    } catch ( Exception e ) {
 		      System.err.println( e.getClass().getName() + ":" + e.getMessage() );
-		      System.exit(0);
+		      try{
+		    	  c.close();
+		      }catch(Exception ee){
+		    	  
+		      }finally{
+		    	  throw new TimeoutException("Databasen hinner inte med");
+		      }
 		    }
-		    System.out.println("Operation done successfully");
-		    return -1;
 	  }
 	
-	 public static Response setBalance(String name, float balance){
+	 public static Response setBalance(String name, float balance) throws TimeoutException{
 		 if(!isCustomerExist(name)){
 				return Response.status(Response.Status.NOT_FOUND).entity("Kunde inte hitta kund med namn:" + name).build();
 			 }
@@ -211,7 +242,7 @@ public class DBHelper {
 		 return Response.ok("{\"Name\":\"" + name + "\", \"Balance\":\"" + balance + "\"}").build();
 	 }
 	 
-	 public static Response getCustomers()
+	 public static Response getCustomers() throws TimeoutException
 	 {
 	      System.out.println("Getting all customers");
 		  Connection c = null;
@@ -237,10 +268,14 @@ public class DBHelper {
 		      return Response.ok(customers).build();
 		    } catch ( Exception e ) {
 		      System.err.println( e.getClass().getName() + ":" + e.getMessage() );
-		      System.exit(0);
+		      try{
+		    	  c.close();
+		      }catch(Exception ee){
+		    	  
+		      }finally{
+		    	  throw new TimeoutException("Databasen hinner inte med");
+		      }
 		    }
-		    System.out.println("Operation done successfully");
-		    return Response.status(Response.Status.NOT_FOUND).entity("No customer with name found").build();
 	 }
 
 	
