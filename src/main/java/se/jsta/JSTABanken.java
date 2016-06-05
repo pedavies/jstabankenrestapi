@@ -31,7 +31,7 @@ public class JSTABanken {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
 	public Response createCustomer(@QueryParam("name") String name)  {
-    	if(null == name){
+    	if(null == name || name.isEmpty()){
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("You have to provide a name").build();
     	}
     	try{
@@ -48,7 +48,7 @@ public class JSTABanken {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
 	public Response insertMoney(@QueryParam("name") String name , @QueryParam("amount") float amount){
-    	if(null == name){
+    	if(null == name || name.isEmpty()){
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("You have to provide a name").build();
     	}
     	if(0 == amount){
@@ -78,7 +78,7 @@ public class JSTABanken {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
 	public Response withdrawMoney(@QueryParam("name") String name , @QueryParam("amount") float amount) {
-    	if(null == name){
+    	if(null == name || name.isEmpty()){
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("You have to provide a name").build();
     	}
     	if(0 == amount){
@@ -113,7 +113,7 @@ public class JSTABanken {
     @Path("getbalance")
     @Produces(MediaType.APPLICATION_JSON)
 	public Response getBalance(@QueryParam("name") String name)  {
-    	if(null == name){
+    	if(null == name || name.isEmpty()){
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("You have to provide a name").build();
     	}
     	try{
