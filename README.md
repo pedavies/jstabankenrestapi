@@ -10,11 +10,11 @@ För att starta REST API:et:
 
 1b. Bygg koden (Endast om du har ändrat något): mvn clean install 
 
-2. Kör filen: java -jar target/jstabanken-rest-1.0-SNAPSHOT-jar-with-dependencies.jar 
+2. Kör filen: java -Dport=<portnumber> -jar target/jstabanken-rest-1.0-SNAPSHOT-jar-with-dependencies.jar 
 
-Resultat: Du får ett REST API med addressen: http://localhost:8081/jstabanken-rest-api
+Resultat: Du får ett REST API med addressen: http://localhost:<portnumber>/jstabanken-rest-api
 
-Wadl filen hittas på: http://localhost:8081/jstabanken-rest-api/application.wadl
+Wadl filen hittas på: http://localhost:<portnumber>/jstabanken-rest-api/application.wadl
 
 Gå till http://jsta.se för kurser i SoapUI och testautomatisering
 
@@ -31,10 +31,10 @@ To start the REST API:
 
 1b. Build the code (Only if you change something): mvn clean install 
 
-2. Run the file: java -jar target/jstabanken-rest-1.0-SNAPSHOT-jar-with-dependencies.jar 
+2. Run the file: java -Dport=<portnumber> -jar target/jstabanken-rest-1.0-SNAPSHOT-jar-with-dependencies.jar 
 
-Result: You will get an API with the address: http://localhost:8081/jstabanken-rest-api
+Result: You will get an API with the address: http://localhost:<portnumber>/jstabanken-rest-api
 
-The Wadl file will be found at: http://localhost:8081/jstabanken-rest-api/application.wadl
+The Wadl file will be found at: http://localhost:<portnumber>/jstabanken-rest-api/application.wadl
 
 Go to http://jsta.se for cources in SoapUI and test automation
